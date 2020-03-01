@@ -1,0 +1,40 @@
+
+
+
+
+max_level = max number of levels of fractal
+level = current level hierarchy of fractal
+d = distance between points
+angle_module = 30 ### variation module of angle
+angle_before = angle of last fractal level
+angle_random_modifier = random value between -2 and 2 (-2, -1, 0, 1, 2)
+angle_after = angle_before + angle_module * angle_random_modifier
+co = math.tan(math.radians(30)) * 50 ## cateto oposto
+
+coordinates =
+
+nx = math.cos(math.radians(angle_after)) * d
+ny = math.sin(math.radians(angle_after)) * d
+
+new_x = old_x + nx
+new_y = old_y + ny
+
+class Line(angle_before, d, old_x, old_y):
+   d = 50
+   angle_module = 30
+
+   angle_random_modifier = random(-2, 2)
+   angle_after = angle_before + angle_module * angle_random_modifier
+   nx = math.cos(math.radians(angle_after)) * d
+   ny = math.sin(math.radians(angle_after)) * d
+   new_x = old_x + nx
+   new_y = old_y + ny
+
+   w.create_line(old_x, old_y, new_x, new_y)
+
+
+
+(math.asin(x)^2 * angle_after) + (math.acos(x)^2 * angle_after) = 1
+
+
+math.sin(math.radians(30))**2

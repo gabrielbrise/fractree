@@ -1,0 +1,8 @@
+*.exe
+dist
+build
+PORTFOLIO
+CAD
+.pytest_ache
+__pycache__
+.idea
