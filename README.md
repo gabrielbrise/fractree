@@ -5,7 +5,7 @@ Python 3 fractal tree generator with TKINTER interface and unit tests
 
 The only python dependency you need is PIL
 
-    pip install PIL
+    pip3 install Pillow
 
 To run the project you need Python 3
 
