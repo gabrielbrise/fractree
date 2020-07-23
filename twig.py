@@ -1,35 +1,6 @@
 import random
 import math
 
-# angle_module = myconfig.angle_module
-# angle_before = myconfig.angle_before
-# old_x = myconfig.old_x
-# old_y = myconfig.old_y
-# levels = myconfig.levels
-# d = myconfig.d
-# random_range = myconfig.random_range
-# start_twig_w = myconfig.start_twig_w
-
-# parameters = myconfig.initialize()
-#
-# angle_module = parameters[0]
-# angle_before = parameters[1]
-# old_x = parameters[2]
-# old_y = parameters[3]
-# levels = parameters[4]
-# d = parameters[5]
-# random_range = parameters[6]
-# start_twig_w = parameters[7]
-
-# angle_module = 15
-# angle_before = 30
-# old_x = 600
-# old_y = 600
-# levels = 35
-# d = 150
-# random_range = 2
-# start_twig_w = levels / 3.25
-
 
 class Twig:
 
@@ -38,16 +9,15 @@ class Twig:
         self.old_x = old_x
         self.old_y = old_y
         self.level = level
+        self.d = d
         random_range = treeconfig.random_range
         angle_module = treeconfig.angle_module
-
-
-        self.d = d
 
         d = distance_after_step(d, level)
         distance_after_step(d, level)
         random_value = angle_random_modifier(random_range)
-        self.angle_after = angle_randomizer(angle_before, angle_module, random_value, level)
+        self.angle_after = angle_randomizer(
+            angle_before, angle_module, random_value, level)
         self.new_x = new_xy(d, self.angle_after, old_x, old_y, level)[0]
         self.new_y = new_xy(d, self.angle_after, old_x, old_y, level)[1]
         self.twig_width = twig_width(start_twig_w, level)
@@ -59,8 +29,6 @@ def distance_after_step(d, level):
 
 
 def angle_random_modifier(random_range):
-    # random_value = random.randint(random_range * -1, random_range)
-    # random_value = random.randint(0, random_range)
     random_value = random.randint(random_range * -1, random_range * 1)
     return random_value
 
