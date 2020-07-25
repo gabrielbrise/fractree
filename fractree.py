@@ -1,5 +1,7 @@
 import twig
 import tkinter as tk
+from PIL import ImageTk
+import random
 
 
 class Fractree:
@@ -14,6 +16,7 @@ class Fractree:
         window.destroy()
         self.treeconfig.old_x = width / 2
         self.treeconfig.old_y = height * 0.85
+        self.tree = []
 
     def twig_creator(self, angle_before, old_x, old_y, level, d):
         start_twig_w = self.treeconfig.levels * self.treeconfig.width
@@ -30,7 +33,6 @@ class Fractree:
             self.tree_generator(angle_before, old_x, old_y,
                                 new_branch_levels, new_branch_level, d)
             # w.create_line(old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round')
-            self.twig_colored(old_x, old_y, new_x, new_y, new_twig, level)
             return new_twig
         #
         # if level != 1:
@@ -44,43 +46,25 @@ class Fractree:
         else:
 
             # w.create_line(old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round')
-            self.twig_colored(old_x, old_y, new_x, new_y, new_twig, level)
             return new_twig
 
-    def twig_colored(self, old_x, old_y, new_x, new_y, new_twig, level):
-        if level > self.treeconfig.levels * .75 and level != self.treeconfig.levels:
-            # w.create_line(old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round', fill='#afafaf')
-            # self.canvas.create_line(old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round', fill='#858585')
-
+    def render_twig(self, tree):
+        for i in tree:
+            color = "#afafaf" if i.level > self.treeconfig.levels * \
+                .75 and i.level != self.treeconfig.levels else "#000000"
             self.canvas.create_line(
-                old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round', fill='#afafaf')
-
-        elif level == self.treeconfig.levels:
-            # self.canvas.create_oval(old_x + ((old_x - new_x) / 2),
-            #                         old_y, new_x, new_y, outline="#e55032", fill="#e55032")
-            # self.canvas.create_oval(old_x, old_y, old_x + 3, old_y + 6, outline="#858585", fill="#858585")
-            return
-            # w.create_line(old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round', fill='#000000')
-            # w.create_line(old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round', fill='#FFFFFF')
-
-        else:
-            self.canvas.create_line(
-                old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round', fill='#000000')
-            # w.create_line(old_x, old_y, new_x, new_y, width=new_twig.twig_width, capstyle='round', fill='#FFFFFF')
+                i.old_x, i.old_y, i.new_x, i.new_y, width=i.twig_width, capstyle='round', fill=color)
 
     def tree_generator(self, angle_before, old_x, old_y, levels, level, d):
-        tree = []
 
         for i in range(levels):
             new_twig = self.twig_creator(angle_before, old_x, old_y, level, d)
-            tree.append(new_twig)
+            self.tree.append(new_twig)
             angle_before = new_twig.angle_after
             old_x = new_twig.new_x
             old_y = new_twig.new_y
             level = new_twig.level + 1
             d = new_twig.d
-
-            # self.treeconfig.tree_cache.append(NewTwig(old_x, old_y, new_twig.new_x, new_twig.new))
 
             if self.treeconfig.slow_drawing is True:
                 self.canvas.update_idletasks()
@@ -98,3 +82,5 @@ class Fractree:
                 tree_number_module * i) + tree_number_module
             self.tree_generator(self.treeconfig.angle_before, self.treeconfig.old_x,
                                 self.treeconfig.old_y, self.treeconfig.levels, 1, self.treeconfig.d)
+        # self.export_to_png()
+        self.render_twig(self.tree)

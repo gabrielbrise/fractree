@@ -3,13 +3,51 @@ import tkinter as tk
 import treeconfig
 from PIL import Image, ImageTk
 import threading as thread
+import tkmacosx as tkmac
+from export import Export as export
+
+
+class Button(tk.Label):
+    def __init__(self, parent, text, row, column, *args, **kwargs):
+        tk.Label.__init__(self, parent, text=text, bg='#000000', fg='#ffffff', font=(
+            'Raleway', 12), highlightcolor='#fff', activebackground='#000000', highlightthickness=1, borderwidth=2, relief="ridge", padx=10, pady=5,  * args, **kwargs)
+        self.grid(row=row, column=column)
+
+        self.bind('<Button-1>', self.press_change_color)
+        self.bind('<ButtonRelease-1>', self.release_change_color)
+
+    def press_change_color(self, event):
+        self.config(bg="#fff", fg="#000", relief="sunken")
+
+    def release_change_color(self, event):
+        self.config(bg="#000", fg="#fff", relief="ridge")
+
+
+class Logo(tk.Label):
+
+    def __init__(self, parent, image, row, column, *args, **kwargs):
+        self.image_object = Image.open(image)
+        self.image_object = self.image_object.resize(
+            (20, 20), Image.ANTIALIAS)
+        self.image = ImageTk.PhotoImage(self.image_object)
+        tk.Label.__init__(self, parent, image=self.image,
+                          bg="#000000", *args, **kwargs)
+
+        self.grid(row=row, column=column, padx=5)
+
+
+class Label(tk.Label):
+    def __init__(self, parent, text, row, column, *args, **kwargs):
+        tk.Label.__init__(self, parent, text=text, bg='#000000',
+                          fg='#FFFFFF', font=("Raleway", 12),  *args, **kwargs)
+        self.grid(row=row, column=column, sticky="W", padx=(0, 10))
 
 
 class Input(tk.Entry):
-    def __init__(self, parent, *args, **kwargs):
+    def __init__(self, parent, row, column, *args, **kwargs):
         tk.Entry.__init__(self, parent, bg='#000000', fg='#FFFFFF',
                           insertbackground='#FFFFFF', justify='center', width=7, borderwidth=1, highlightthickness=1, *args, **kwargs)
-        pass
+        self.grid(row=row, column=column)
 
 
 class UI:
@@ -18,13 +56,10 @@ class UI:
         self.treeconfig = treeconfig.TreeConfig()
         # tk.Frame.__init__(self, parent, *args, **kwargs)
         self.parent = parent
-
-        # root.state("zoomed")
+        self.tree = []
 
         height = root.winfo_screenheight()
         width = root.winfo_screenwidth()
-        # height = 1080
-        # width = 1536
 
         frame = tk.Frame(root, bg='#80c1ff')
         frame.place(relx=0, rely=0.0, relwidth=1, relheigh=1)
@@ -38,87 +73,46 @@ class UI:
         form = tk.Frame(label, bg='#000000', padx=5, pady=10)
         form.place(relx=0.0, rely=0.0, relwidth=0.5, relheigh=1)
 
-        tk.Label(form, text="Angle Module", bg='#000000', fg='#FFFFFF', font=(
-            "Montserrat", 10)).grid(row=0, column=2, sticky="W", padx=(0, 10))
-        tk.Label(form, text="Levels", bg='#000000', fg='#FFFFFF', font=(
-            "Montserrat", 10), anchor="w").grid(row=1, column=2, sticky="W", padx=(0, 10))
-        tk.Label(form, text="Length", bg='#000000', fg='#FFFFFF', font=(
-            "Montserrat", 10)).grid(row=2, column=2, sticky="W", padx=(0, 10))
-        tk.Label(form, text="Angle Random Factor", bg='#000000', fg='#FFFFFF', font=(
-            "Montserrat", 10)).grid(row=0, column=5, sticky="W", padx=(0, 10))
-        tk.Label(form, text="Width", bg='#000000', fg='#FFFFFF', font=(
-            "Montserrat", 10)).grid(row=1, column=5, sticky="W", padx=(0, 10))
-        tk.Label(form, text="Number of Trees", bg='#000000', fg='#FFFFFF', font=(
-            "Montserrat", 10)).grid(row=2, column=5, sticky="W", padx=(0, 10))
-
-        tk.Label(form, text="Slow Drawing", bg='#000000', fg='#FFFFFF', font=("Montserrat", 10)).grid(row=0, column=7,
-                                                                                                      sticky="W",
-                                                                                                      padx=(10, 10))
+        form2 = tk.Frame(label, bg="#000000", padx=5, pady=10)
+        form2.place(relx=0.65, rely=0.0, relwidth=0.5, relheight=1)
 
         def activateCheck():
             if self.treeconfig.slow_drawing == True:  # whenever checked
-                # self.e7.config(state=NORMAL)
                 self.treeconfig.slow_drawing = False
-                # self.e7.deselect()
             elif self.treeconfig.slow_drawing == False:  # whenever unchecked
-                # self.e7.config(state=ACTIVE)
                 self.treeconfig.slow_drawing = True
-                # self.e7.select()
 
-        self.e1 = Input(form)
-        self.e2 = Input(form)
-        self.e3 = Input(form)
-        self.e4 = Input(form)
-        self.e5 = Input(form)
-        self.e6 = Input(form)
+        Logo(form, image="assets/angle_module.png", row=0, column=1)
+        Logo(form, image="assets/levels.png", row=1, column=1)
+        Logo(form, image="assets/start_height.png", row=2, column=1)
+        Logo(form, image="assets/dice.png", row=0, column=4)
+        Logo(form, image="assets/trees.png", row=2, column=4)
+        Logo(form, image="assets/width.png", row=1, column=4)
+        Logo(form, image="assets/slow.png", row=0, column=7)
+
+        Label(form, text="Angle Module", row=0, column=2)
+        Label(form, text="Levels", row=1, column=2)
+        Label(form, text="Length", row=2, column=2)
+        Label(form, text="Angle Random Factor", row=0, column=5)
+        Label(form, text="Width", row=1, column=5)
+        Label(form, text="Number of Trees", row=2, column=5)
+        Label(form, text="Slow Drawing", row=0, column=8)
+
+        self.e1 = Input(form, row=0, column=3)
+        self.e2 = Input(form, row=1, column=3)
+        self.e3 = Input(form, row=2, column=3)
+        self.e4 = Input(form, row=0, column=6)
+        self.e5 = Input(form, row=1, column=6)
+        self.e6 = Input(form, row=2, column=6)
+
         self.e7 = tk.Checkbutton(form, state='normal', bg='#000000', fg='#FFFFFF', justify='center',
                                  variable=self.treeconfig.slow_drawing, command=activateCheck, onvalue=True, offvalue=False)
-        self.e1.grid(row=0, column=3)
-        self.e2.grid(row=1, column=3)
-        self.e3.grid(row=2, column=3)
-        self.e4.grid(row=0, column=6)
-        self.e5.grid(row=1, column=6)
-        self.e6.grid(row=2, column=6)
-        self.e7.grid(row=0, column=8)
+        self.e7.grid(row=0, column=9)
 
-        self.i_angle_module = Image.open("assets/angle_module.png")
-        self.i_angle_module = self.i_angle_module.resize(
-            (20, 15), Image.ANTIALIAS)
-        self.i_angle_module_image = ImageTk.PhotoImage(self.i_angle_module)
+        export_svg_button = Button(
+            form2, text="Export to SVG", row=9, column=0)
 
-        self.i_levels = Image.open("assets/levels.png")
-        self.i_levels = self.i_levels.resize((20, 20), Image.ANTIALIAS)
-        self.i_levels_image = ImageTk.PhotoImage(self.i_levels)
-
-        self.i_start_height = Image.open("assets/start_height.png")
-        self.i_start_height = self.i_start_height.resize(
-            (15, 20), Image.ANTIALIAS)
-        self.i_start_height_image = ImageTk.PhotoImage(self.i_start_height)
-
-        self.i_dice = Image.open("assets/dice.png")
-        self.i_dice = self.i_dice.resize((21, 20), Image.ANTIALIAS)
-        self.i_dice_image = ImageTk.PhotoImage(self.i_dice)
-
-        self.i_trees = Image.open("assets/trees.png")
-        self.i_trees = self.i_trees.resize((21, 20), Image.ANTIALIAS)
-        self.i_trees_image = ImageTk.PhotoImage(self.i_trees)
-
-        self.i_width = Image.open("assets/width.png")
-        self.i_width = self.i_width.resize((25, 12), Image.ANTIALIAS)
-        self.i_width_image = ImageTk.PhotoImage(self.i_width)
-
-        tk.Label(form, image=self.i_angle_module_image,
-                 bg="#000000").grid(row=0, column=1, padx=5)
-        tk.Label(form, image=self.i_levels_image, bg="#000000").grid(
-            row=1, column=1, padx=5)
-        tk.Label(form, image=self.i_start_height_image,
-                 bg="#000000").grid(row=2, column=1, padx=5)
-        tk.Label(form, image=self.i_dice_image, bg="#000000").grid(
-            row=0, column=4, padx=5)
-        tk.Label(form, image=self.i_width_image, bg="#000000").grid(
-            row=1, column=4, padx=5)
-        tk.Label(form, image=self.i_trees_image, bg="#000000").grid(
-            row=2, column=4, padx=5)
+        export_svg_button.bind('<Button-1>', self.export_to_svg)
 
         start = tk.Label(label, bg='#000000', bd=0,
                          text="GENERATE", fg='#FFFFFF', font=('Montserrat', 40), highlightcolor='#000000', activebackground='#000000')
@@ -127,6 +121,10 @@ class UI:
         start.bind("<Button-1>", self.generate_tree)
 
         self.w.pack()
+
+    def export_to_svg(self, event):
+        export.svg(self, tree=self.tree)
+        print("Tree exported!")
 
     def generate_tree(self, event):
         print('Start')
@@ -147,8 +145,9 @@ class UI:
 
         self.tree_cache = self.treeconfig.tree_cache
         fractree = Fractree(self.w, self.treeconfig)
-        thread.Thread(target=fractree.start(
-            self.treeconfig.tree_number)).start()
+        fractree.start(self.treeconfig.tree_number)
+        print("Finished")
+        self.tree = fractree.tree
 
 
 if __name__ == "__main__":
