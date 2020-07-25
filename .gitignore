@@ -1,6 +1,7 @@
 *.exe
 dist
 build
+export
 PORTFOLIO
 CAD
 .pytest_ache

@@ -10,6 +10,7 @@ class Twig:
         self.old_y = old_y
         self.level = level
         self.d = d
+        self.treeconfig = treeconfig
         random_range = treeconfig.random_range
         angle_module = treeconfig.angle_module
 
