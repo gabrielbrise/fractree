@@ -54,6 +54,8 @@ class Fractree:
                 .75 and i.level != self.treeconfig.levels else "#000000"
             self.canvas.create_line(
                 i.old_x, i.old_y, i.new_x, i.new_y, width=i.twig_width, capstyle='round', fill=color)
+            if self.treeconfig.slow_drawing is True:
+                self.canvas.update()
 
     def tree_generator(self, angle_before, old_x, old_y, levels, level, d):
 
@@ -65,9 +67,6 @@ class Fractree:
             old_y = new_twig.new_y
             level = new_twig.level + 1
             d = new_twig.d
-
-            if self.treeconfig.slow_drawing is True:
-                self.canvas.update_idletasks()
 
     def start(self, tree_number):
         window = tk.Tk()
