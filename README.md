@@ -1,22 +1,82 @@
 # fractree
+
 Python 3 fractal tree generator with TKINTER interface and unit tests
 
-## How to run the fractal tree generator
+## Project Setup
 
-The only python dependency you need is PIL
+### Prerequisites
 
-    pip3 install Pillow
+- Python 3.8 or higher
+- Git
 
-To run the project you need Python 3
+### Installation
 
-	python3 fractreeUI.py
+1. **Clone the repository:**
 
-## Running unit tests
+   ```bash
+   git clone https://github.com/gabrielbrise/fractree.git
+   cd fractree
+   ```
 
-The unit tests are written with pytest, so you need to install it
+2. **Create and activate a virtual environment:**
 
-	pip3 install pytest
-	
-To run the tests
+   ```bash
+   python -m venv venv
 
-	pytest test_twig.py
+   # On Linux/macOS:
+   source venv/bin/activate
+
+   # On Windows:
+   venv\Scripts\activate
+   ```
+
+3. **Install Python dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Install system dependencies (Linux only):**
+   ```bash
+   sudo apt update
+   sudo apt install libcairo2-dev pkg-config python3-dev
+   ```
+
+### Running the Application
+
+To run the fractal tree generator:
+
+```bash
+python fractreeUI.py
+```
+
+The application will open a GUI where you can:
+
+- Adjust tree parameters (angle, levels, randomness)
+- Generate multiple trees
+- Export trees to SVG format
+- Control drawing speed
+
+## Running Unit Tests
+
+To run the unit tests:
+
+```bash
+pytest test_twig.py
+```
+
+## Dependencies
+
+- **Pillow** - Image processing and display
+- **cairosvg** - SVG export functionality
+- **pytest** - Unit testing framework
+
+## Cross-Platform Compatibility
+
+This project works on:
+
+- ✅ Linux (tested)
+- ✅ macOS
+- ✅ Windows
+
+The code automatically handles platform-specific differences for window management and dependencies.

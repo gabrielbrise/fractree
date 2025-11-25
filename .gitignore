@@ -4,6 +4,23 @@ build
 export
 PORTFOLIO
 CAD
-.pytest_ache
+.pytest_cache
 __pycache__
 .idea
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# IDE
+.vscode/
+*.swp
+*.swo

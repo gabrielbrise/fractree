@@ -1,0 +1,6 @@
+# Core dependencies
+Pillow>=9.0.0
+cairosvg>=2.5.0
+
+# Development dependencies
+pytest>=7.0.0

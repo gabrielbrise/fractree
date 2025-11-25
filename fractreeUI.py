@@ -3,7 +3,11 @@ import tkinter as tk
 import treeconfig
 from PIL import Image, ImageTk
 import threading as thread
-import tkmacosx as tkmac
+try:
+    import tkmacosx as tkmac
+except ImportError:
+    # tkmacosx is only available on macOS
+    tkmac = None
 from export import Export as export
 
 
@@ -28,7 +32,7 @@ class Logo(tk.Label):
     def __init__(self, parent, image, row, column, *args, **kwargs):
         self.image_object = Image.open(image)
         self.image_object = self.image_object.resize(
-            (20, 20), Image.ANTIALIAS)
+            (20, 20), Image.LANCZOS)
         self.image = ImageTk.PhotoImage(self.image_object)
         tk.Label.__init__(self, parent, image=self.image,
                           bg="#000000", *args, **kwargs)
@@ -44,10 +48,12 @@ class Label(tk.Label):
 
 
 class Input(tk.Entry):
-    def __init__(self, parent, row, column, *args, **kwargs):
+    def __init__(self, parent, row, column, default_value="", *args, **kwargs):
         tk.Entry.__init__(self, parent, bg='#000000', fg='#FFFFFF',
                           insertbackground='#FFFFFF', justify='center', width=7, borderwidth=1, highlightthickness=1, *args, **kwargs)
         self.grid(row=row, column=column)
+        if default_value:
+            self.insert(0, str(default_value))
 
 
 class UI:
@@ -98,12 +104,12 @@ class UI:
         Label(form, text="Number of Trees", row=2, column=5)
         Label(form, text="Slow Drawing", row=0, column=8)
 
-        self.e1 = Input(form, row=0, column=3)
-        self.e2 = Input(form, row=1, column=3)
-        self.e3 = Input(form, row=2, column=3)
-        self.e4 = Input(form, row=0, column=6)
-        self.e5 = Input(form, row=1, column=6)
-        self.e6 = Input(form, row=2, column=6)
+        self.e1 = Input(form, row=0, column=3, default_value=self.treeconfig.angle_module)
+        self.e2 = Input(form, row=1, column=3, default_value=self.treeconfig.levels)
+        self.e3 = Input(form, row=2, column=3, default_value=abs(self.treeconfig.d))  # Show positive value
+        self.e4 = Input(form, row=0, column=6, default_value=self.treeconfig.random_range)
+        self.e5 = Input(form, row=1, column=6, default_value=int(self.treeconfig.width * 100))  # Show as percentage
+        self.e6 = Input(form, row=2, column=6, default_value=self.treeconfig.tree_number)
 
         self.e7 = tk.Checkbutton(form, state='normal', bg='#000000', fg='#FFFFFF', justify='center',
                                  variable=self.treeconfig.slow_drawing, command=activateCheck, onvalue=True, offvalue=False)
@@ -152,7 +158,15 @@ class UI:
 
 if __name__ == "__main__":
     root = tk.Tk()
-    root.state('zoomed')
+    
+    # Cross-platform way to maximize window
+    try:
+        # Windows
+        root.state('zoomed')
+    except tk.TclError:
+        # Linux/macOS
+        root.attributes('-zoomed', True)
+    
     height = root.winfo_screenheight()
     width = root.winfo_screenwidth()
 
